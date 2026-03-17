@@ -105,6 +105,7 @@ function createRouter(routes, notFoundRenderer) {
 }
 
 export {
+  normalizeHash,
   buildHash,
   createRouter
 };

@@ -137,5 +137,6 @@ async function renderHomeView(context) {
 }
 
 export {
+  getCounts,
   renderHomeView
 };

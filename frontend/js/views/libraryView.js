@@ -174,5 +174,7 @@ async function renderLibraryView(context, route) {
 }
 
 export {
+  normalizeStatus,
+  groupByStatus,
   renderLibraryView
 };
