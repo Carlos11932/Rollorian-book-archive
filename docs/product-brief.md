@@ -13,7 +13,7 @@ The project should live inside one repository and be easy to run locally, unders
 
 ## MVP Goals
 
-- Search books from a public API, preferably Open Library
+- Search books from a public API, using Google Books for the current MVP
 - Show useful external metadata such as title, authors, cover, publication year, and ISBN when available
 - Add selected external books into a local collection stored by the project
 - Manage a personal collection with statuses `wishlist`, `to_read`, `reading`, and `read`
@@ -37,19 +37,19 @@ The project should live inside one repository and be easy to run locally, unders
 - Backend: Node.js + Express
 - ORM: Prisma
 - Database: SQLite
-- External books API: Open Library unless a better alternative is clearly justified
+- External books API: Google Books via backend-managed configuration
 
 ## Architecture Constraints
 
 1. Frontend and backend must live in the same repository.
-2. The frontend must not call Open Library directly.
+2. The frontend must not call the external books provider directly.
 3. The frontend must not access the database directly.
 4. The backend is the only layer allowed to:
    - call the external books API
    - normalize external data
    - persist local collection data
 5. Route handlers should stay thin and delegate business logic.
-6. Open Library integration should not live inside route handlers.
+6. Google Books integration should not live inside route handlers.
 7. Avoid unnecessary abstractions; do not force a repository layer if Prisma already covers the need.
 8. Keep the MVP simple and maintainable.
 
@@ -59,7 +59,7 @@ The project should live inside one repository and be easy to run locally, unders
 
 1. The user searches by title, author, or ISBN.
 2. The frontend sends the query to the backend.
-3. The backend queries Open Library.
+3. The backend queries Google Books.
 4. The backend normalizes results to the app format.
 5. The frontend renders the results.
 6. The user adds one result to the local collection.

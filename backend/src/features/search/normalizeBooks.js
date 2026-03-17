@@ -1,22 +1,49 @@
-function buildCoverUrl(coverId) {
-  if (!coverId) {
+function buildCoverUrl(imageLinks) {
+  if (!imageLinks) {
     return null;
   }
 
-  return `https://covers.openlibrary.org/b/id/${coverId}-M.jpg`;
+  const rawUrl = imageLinks.thumbnail || imageLinks.smallThumbnail || null;
+
+  if (!rawUrl) {
+    return null;
+  }
+
+  return rawUrl.replace('http://', 'https://');
 }
 
-function normalizeBook(doc) {
-  const externalId = doc.key || doc.cover_edition_key || doc.edition_key?.[0] || doc.isbn?.[0];
+function selectIndustryIdentifier(identifiers, preferredType) {
+  if (!Array.isArray(identifiers)) {
+    return null;
+  }
+
+  const match = identifiers.find((identifier) => identifier?.type === preferredType && identifier.identifier);
+  return match ? match.identifier : null;
+}
+
+function extractPublishedYear(publishedDate) {
+  if (typeof publishedDate !== 'string') {
+    return null;
+  }
+
+  const match = publishedDate.match(/^(\d{4})/);
+  return match ? Number(match[1]) : null;
+}
+
+function normalizeBook(item) {
+  const volumeInfo = item.volumeInfo || {};
+  const externalId = item.id || selectIndustryIdentifier(volumeInfo.industryIdentifiers, 'ISBN_13');
+  const isbn13 = selectIndustryIdentifier(volumeInfo.industryIdentifiers, 'ISBN_13');
+  const isbn10 = selectIndustryIdentifier(volumeInfo.industryIdentifiers, 'ISBN_10');
 
   return {
-    externalSource: 'open_library',
-    externalId: externalId || `fallback-${doc.title || 'unknown'}`,
-    title: doc.title || 'Untitled',
-    authors: Array.isArray(doc.author_name) ? doc.author_name.filter(Boolean) : [],
-    publishedYear: Number.isInteger(doc.first_publish_year) ? doc.first_publish_year : null,
-    isbn: Array.isArray(doc.isbn) && doc.isbn.length > 0 ? doc.isbn[0] : null,
-    coverUrl: buildCoverUrl(doc.cover_i)
+    externalSource: 'google_books',
+    externalId: externalId || `fallback-${volumeInfo.title || 'unknown'}`,
+    title: volumeInfo.title || 'Untitled',
+    authors: Array.isArray(volumeInfo.authors) ? volumeInfo.authors.filter(Boolean) : [],
+    publishedYear: extractPublishedYear(volumeInfo.publishedDate),
+    isbn: isbn13 || isbn10,
+    coverUrl: buildCoverUrl(volumeInfo.imageLinks)
   };
 }
 

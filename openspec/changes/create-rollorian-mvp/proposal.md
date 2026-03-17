@@ -9,7 +9,7 @@ This change establishes a clear MVP for a personal library application that comb
 ## What Changes
 
 - Introduce a full-stack app inside one repository
-- Build a backend that searches Open Library and manages local persisted books
+- Build a backend that searches Google Books and manages local persisted books
 - Build a frontend in vanilla HTML, CSS, and JavaScript
 - Persist the user collection in SQLite through Prisma
 - Support the first collection lifecycle states: `wishlist`, `to_read`, `reading`, `read`
@@ -43,12 +43,12 @@ This change establishes a clear MVP for a personal library application that comb
 - Use a simple monorepo-style layout with `frontend/` and `backend/`
 - Keep the frontend framework-free and consume only the local backend API
 - Use Express for HTTP routing and Prisma with SQLite for persistence
-- Normalize Open Library responses into a stable app-level shape before the frontend consumes them or the backend stores them
+- Normalize Google Books responses into a stable app-level shape before the frontend consumes them or the backend stores them
 - Let the backend optionally serve the static frontend to simplify local development
 
 ## Risks And Trade-Offs
 
-- Open Library data can be incomplete or inconsistent, so normalization and fallbacks are required
+- Google Books data can be incomplete or inconsistent, so normalization and fallbacks are required
 - Vanilla JS keeps the app lightweight, but structure must be deliberate to avoid frontend sprawl
 - SQLite is ideal for the MVP, but future multi-user or hosted scenarios would likely require a different database
 

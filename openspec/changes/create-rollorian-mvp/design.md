@@ -53,7 +53,7 @@ Rollorian-book-archive/
 
 - Express app with thin route handlers
 - Service layer for:
-  - Open Library search integration
+  - Google Books search integration
   - normalization of external payloads
   - book collection business rules
 - Prisma client for persistence
@@ -100,7 +100,7 @@ Initial `Book` fields:
 
 - `GET /api/search/books?q=`
   - validates the query
-  - queries Open Library
+  - queries Google Books
   - normalizes results into a stable response shape
 
 ### Local Collection
@@ -122,7 +122,7 @@ Initial `Book` fields:
 
 ## External Data Normalization
 
-Open Library can omit authors, cover images, ISBNs, or years. The backend should convert raw results into a stable app-level contract with safe fallbacks:
+Google Books can omit authors, cover images, ISBNs, or years. The backend should convert raw results into a stable app-level contract with safe fallbacks:
 
 - missing authors -> empty array or display fallback
 - missing cover -> null `coverUrl`
@@ -143,7 +143,7 @@ Normalization happens before data reaches the frontend and before any record is 
 1. Use Express instead of raw Node HTTP to keep routing simple and maintainable.
 2. Use Prisma instead of handwritten SQL for faster iteration and clearer schema management.
 3. Keep the frontend framework-free to stay aligned with the project constraints.
-4. Keep the browser isolated from Open Library so API shape and persistence rules stay centralized.
+4. Keep the browser isolated from Google Books so API shape and persistence rules stay centralized.
 
 ## Risks
 

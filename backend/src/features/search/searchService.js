@@ -1,5 +1,5 @@
 const HttpError = require('../../lib/httpError');
-const { fetchBooks } = require('./openLibraryClient');
+const { fetchBooks } = require('./googleBooksClient');
 const { normalizeSearchResults } = require('./normalizeBooks');
 
 async function searchBooks(rawQuery) {

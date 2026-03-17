@@ -1,18 +1,18 @@
 # Rollorian Book Archive
 
-Rollorian Book Archive is a small full-stack personal library app. It lets one user search books through Open Library via a local Express backend and curate a local collection stored in SQLite with Prisma.
+Rollorian Book Archive is a small full-stack personal library app. It lets one user search books through Google Books via a local Express backend and curate a local collection stored in SQLite with Prisma.
 
 ## Stack
 
 - Frontend: HTML, CSS, and vanilla JavaScript
 - Backend: Node.js + Express
 - Persistence: Prisma + SQLite
-- External source: Open Library through the backend only
+- External source: Google Books through the backend only
 
 ## Architecture Summary
 
 - `frontend/` contains the static SPA-like interface.
-- `backend/` contains the Express API, Open Library integration, business services, and Prisma setup.
+- `backend/` contains the Express API, Google Books integration, business services, and Prisma setup.
 - The browser talks only to the local backend.
 - Route handlers stay thin and delegate work to feature services.
 
@@ -20,38 +20,36 @@ Rollorian Book Archive is a small full-stack personal library app. It lets one u
 
 1. The user searches from the frontend.
 2. The frontend calls `GET /api/search/books?q=` on the local backend.
-3. The backend calls Open Library, normalizes the response, and returns a stable payload.
+3. The backend calls Google Books, normalizes the response, and returns a stable payload.
 4. The user saves a book through `POST /api/books`.
 5. Prisma persists the local collection in SQLite.
 6. The frontend reads and manages saved books through the `/api/books` endpoints.
 
 ## Getting Started
 
-1. Install backend dependencies:
+1. Run the first-time setup workflow from the repo root:
 
 ```bash
-npm install --prefix backend
+npm run setup
 ```
 
-2. Generate the Prisma client:
+This installs backend dependencies, creates `backend/.env` from `backend/.env.example` when missing, generates the Prisma client, and initializes the SQLite schema with `prisma db push`.
+
+2. Optional: add a Google Books API key in `backend/.env`:
 
 ```bash
-npm run db:generate
+GOOGLE_BOOKS_API_KEY=your_key_here
 ```
 
-3. Create the local SQLite database and first migration:
+The app can search Google Books without a key for local development, but a key gives you higher quota and fewer rate-limit surprises.
 
-```bash
-npm run db:migrate -- --name init
-```
-
-4. Start the app:
+3. Start the app:
 
 ```bash
 npm run dev
 ```
 
-5. Open `http://localhost:3000`.
+4. Open `http://localhost:3000`.
 
 ## Verification
 
@@ -80,3 +78,4 @@ npm run smoke:responsive
 
 - The app rejects duplicate saved books by the same external source and external id.
 - Local authors are stored as a delimited string in SQLite and exposed as arrays in API responses to keep the MVP simple.
+- Search responses keep the same frontend-facing shape: `externalSource`, `externalId`, `title`, `authors`, `publishedYear`, `isbn`, `coverUrl`.

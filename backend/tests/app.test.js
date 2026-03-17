@@ -35,14 +35,23 @@ test('GET /api/search/books returns normalized payload', async () => {
     ok: true,
     async json() {
       return {
-        docs: [
+        items: [
           {
-            key: '/works/OL1W',
-            title: 'A Wizard of Earthsea',
-            author_name: ['Ursula K. Le Guin'],
-            first_publish_year: 1968,
-            isbn: ['9780547773742'],
-            cover_i: 1234
+            id: 'google-volume-1',
+            volumeInfo: {
+              title: 'A Wizard of Earthsea',
+              authors: ['Ursula K. Le Guin'],
+              publishedDate: '1968-09-01',
+              industryIdentifiers: [
+                {
+                  type: 'ISBN_13',
+                  identifier: '9780547773742'
+                }
+              ],
+              imageLinks: {
+                thumbnail: 'http://books.google.com/books/content?id=google-volume-1&printsec=frontcover&img=1&zoom=1'
+              }
+            }
           }
         ]
       };
@@ -55,13 +64,13 @@ test('GET /api/search/books returns normalized payload', async () => {
     assert.equal(response.status, 200);
     assert.deepEqual(response.body.items, [
       {
-        externalSource: 'open_library',
-        externalId: '/works/OL1W',
+        externalSource: 'google_books',
+        externalId: 'google-volume-1',
         title: 'A Wizard of Earthsea',
         authors: ['Ursula K. Le Guin'],
         publishedYear: 1968,
         isbn: '9780547773742',
-        coverUrl: 'https://covers.openlibrary.org/b/id/1234-M.jpg'
+        coverUrl: 'https://books.google.com/books/content?id=google-volume-1&printsec=frontcover&img=1&zoom=1'
       }
     ]);
   } finally {
@@ -73,8 +82,8 @@ test('local collection CRUD flow works end to end', async () => {
   const createResponse = await request(app)
     .post('/api/books')
     .send({
-      externalSource: 'open_library',
-      externalId: '/works/OL82563W',
+      externalSource: 'google_books',
+      externalId: 'google-dune-id',
       title: 'Dune',
       authors: ['Frank Herbert'],
       publishedYear: 1965,
@@ -91,8 +100,8 @@ test('local collection CRUD flow works end to end', async () => {
   const duplicateResponse = await request(app)
     .post('/api/books')
     .send({
-      externalSource: 'open_library',
-      externalId: '/works/OL82563W',
+      externalSource: 'google_books',
+      externalId: 'google-dune-id',
       title: 'Dune',
       authors: ['Frank Herbert']
     });

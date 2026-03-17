@@ -14,7 +14,7 @@
 
 ## 3. External search feature
 
-- [x] 3.1 Implement the Open Library client service
+- [x] 3.1 Implement the Google Books client service
 - [x] 3.2 Implement normalization for external search results
 - [x] 3.3 Expose `GET /api/search/books?q=` with validation and error handling
 
