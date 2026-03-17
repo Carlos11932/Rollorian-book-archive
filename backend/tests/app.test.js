@@ -258,6 +258,12 @@ test('local collection CRUD flow works end to end', async () => {
 
   const savedId = createResponse.body.item.id;
 
+  const detailResponse = await request(app).get(`/api/books/${savedId}`);
+
+  assert.equal(detailResponse.status, 200);
+  assert.equal(detailResponse.body.item.id, savedId);
+  assert.equal(detailResponse.body.item.title, 'Dune');
+
   const updateResponse = await request(app)
     .patch(`/api/books/${savedId}`)
     .send({ status: 'reading', notes: 'Halfway through' });
@@ -274,4 +280,11 @@ test('local collection CRUD flow works end to end', async () => {
 
   assert.equal(finalListResponse.status, 200);
   assert.equal(finalListResponse.body.items.length, 0);
+});
+
+test('GET /api/books/:id returns 404 when the book does not exist', async () => {
+  const response = await request(app).get('/api/books/9999');
+
+  assert.equal(response.status, 404);
+  assert.equal(response.body.error.message, 'Book not found');
 });

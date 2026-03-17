@@ -83,6 +83,17 @@ async function listBooks(filters) {
   return books.map(mapBookRecord);
 }
 
+async function getBook(rawId) {
+  const id = parseId(rawId);
+  const book = await prisma.book.findUnique({ where: { id } });
+
+  if (!book) {
+    throw new HttpError(404, 'Book not found');
+  }
+
+  return mapBookRecord(book);
+}
+
 async function createBook(payload) {
   const data = buildCreatePayload(payload || {});
 
@@ -150,6 +161,7 @@ async function deleteBook(rawId) {
 }
 
 module.exports = {
+  getBook,
   listBooks,
   createBook,
   updateBook,

@@ -2,6 +2,7 @@ const express = require('express');
 
 const handleAsync = require('../lib/handleAsync');
 const {
+  getBook,
   listBooks,
   createBook,
   updateBook,
@@ -15,6 +16,14 @@ router.get(
   handleAsync(async (request, response) => {
     const books = await listBooks({ status: request.query.status, q: request.query.q });
     response.json({ items: books });
+  })
+);
+
+router.get(
+  '/:id',
+  handleAsync(async (request, response) => {
+    const book = await getBook(request.params.id);
+    response.json({ item: book });
   })
 );
 

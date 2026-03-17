@@ -39,6 +39,10 @@ function getBooks(filters = {}) {
   return request(`/api/books${query ? `?${query}` : ''}`);
 }
 
+function getBook(id) {
+  return request(`/api/books/${id}`);
+}
+
 function saveBook(book) {
   return request('/api/books', {
     method: 'POST',
@@ -60,6 +64,7 @@ function removeBook(id) {
 }
 
 export {
+  getBook,
   searchBooks,
   getBooks,
   saveBook,

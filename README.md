@@ -11,7 +11,7 @@ Rollorian Book Archive is a small full-stack personal library app. It lets one u
 
 ## Architecture Summary
 
-- `frontend/` contains the static SPA-like interface.
+- `frontend/` contains a routed vanilla SPA organized into `views/`, `shared/`, and a tiny hash router.
 - `backend/` contains the Express API, Google Books integration, business services, and Prisma setup.
 - The browser talks only to the local backend.
 - Route handlers stay thin and delegate work to feature services.
@@ -23,7 +23,7 @@ Rollorian Book Archive is a small full-stack personal library app. It lets one u
 3. The backend calls Google Books, normalizes the response, and returns a stable payload.
 4. The user saves a book through `POST /api/books`.
 5. Prisma persists the local collection in SQLite.
-6. The frontend reads and manages saved books through the `/api/books` endpoints.
+6. The frontend reads and manages saved books through the `/api/books` endpoints and uses hash routes for view-level navigation.
 
 Search requests keep the same API contract, but the backend now applies a few deterministic quality heuristics before returning results:
 
@@ -57,6 +57,13 @@ npm run dev
 
 4. Open `http://localhost:3000`.
 
+The frontend uses hash routing, so the main views are available at:
+
+- `#/`
+- `#/search`
+- `#/library`
+- `#/books/:id`
+
 ## Verification
 
 - Run backend API regression tests:
@@ -76,6 +83,7 @@ npm run smoke:responsive
 - `GET /api/health`
 - `GET /api/search/books?q=`
 - `GET /api/books`
+- `GET /api/books/:id`
 - `POST /api/books`
 - `PATCH /api/books/:id`
 - `DELETE /api/books/:id`
@@ -85,3 +93,4 @@ npm run smoke:responsive
 - The app rejects duplicate saved books by the same external source and external id.
 - Local authors are stored as a delimited string in SQLite and exposed as arrays in API responses to keep the MVP simple.
 - Search responses keep the same frontend-facing shape: `externalSource`, `externalId`, `title`, `authors`, `publishedYear`, `isbn`, `coverUrl`.
+- Wishlist now lives inside the Library view as a first-class status section instead of a detached standalone area.
