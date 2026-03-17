@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rollorian Book Archive</title>
+    <link rel="stylesheet" href="/styles/main.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">Rollorian Archive</p>
+          <h1>Build your personal library without touching the external API mess.</h1>
+          <p class="hero-copy">
+            Search books through the local backend, save the ones you care about, and track your reading status in one clean workspace.
+          </p>
+        </div>
+        <div class="hero-card">
+          <p class="hero-card-label">MVP rules</p>
+          <ul>
+            <li>Vanilla frontend</li>
+            <li>Express backend</li>
+            <li>Prisma + SQLite</li>
+            <li>Backend-only Open Library access</li>
+          </ul>
+        </div>
+      </header>
+
+      <main class="content-grid">
+        <section class="panel" aria-labelledby="search-heading">
+          <div class="panel-header">
+            <div>
+              <p class="panel-kicker">Discover</p>
+              <h2 id="search-heading">Search external books</h2>
+            </div>
+          </div>
+
+          <form id="search-form" class="stack-gap">
+            <label class="field">
+              <span>Title, author, or ISBN</span>
+              <input id="search-input" name="query" type="search" placeholder="Try Dune, Le Guin, or 9780261103573" required />
+            </label>
+            <div class="actions-row">
+              <button type="submit" class="button button-primary">Search</button>
+              <p id="search-feedback" class="feedback" aria-live="polite"></p>
+            </div>
+          </form>
+
+          <div id="search-results" class="card-grid" aria-live="polite"></div>
+        </section>
+
+        <section class="panel" aria-labelledby="collection-heading">
+          <div class="panel-header">
+            <div>
+              <p class="panel-kicker">Curate</p>
+              <h2 id="collection-heading">Local collection</h2>
+            </div>
+            <button id="refresh-collection" class="button button-secondary" type="button">Refresh</button>
+          </div>
+
+          <form id="collection-filters" class="filters-grid">
+            <label class="field">
+              <span>Search by title</span>
+              <input id="collection-query" name="collectionQuery" type="search" placeholder="Filter saved books" />
+            </label>
+
+            <label class="field">
+              <span>Status</span>
+              <select id="collection-status" name="collectionStatus">
+                <option value="all">All statuses</option>
+                <option value="wishlist">Wishlist</option>
+                <option value="to_read">To read</option>
+                <option value="reading">Reading</option>
+                <option value="read">Read</option>
+              </select>
+            </label>
+          </form>
+
+          <p id="collection-feedback" class="feedback" aria-live="polite"></p>
+          <div id="collection-results" class="card-grid" aria-live="polite"></div>
+        </section>
+      </main>
+    </div>
+
+    <template id="book-card-template">
+      <article class="book-card">
+        <div class="book-cover-wrap">
+          <img class="book-cover" alt="" />
+          <div class="cover-fallback">No cover</div>
+        </div>
+        <div class="book-content"></div>
+      </article>
+    </template>
+
+    <script type="module" src="/js/app.js"></script>
+  </body>
+</html>

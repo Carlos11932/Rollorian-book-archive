@@ -1,0 +1,30 @@
+schema: spec-driven
+
+context: |
+  Project: Rollorian Book Archive
+  Product type: full-stack personal library application
+  Frontend: HTML, CSS, JavaScript vanilla
+  Backend: Node.js with Express
+  Persistence: Prisma with SQLite
+  External API: Open Library
+  Constraints:
+    - single repository
+    - single-user MVP
+    - no authentication in v1
+    - no cloud sync in v1
+    - backend owns external API access and database access
+
+rules:
+  proposal:
+    - Keep scope constrained to the MVP described in docs/product-brief.md
+    - Call out explicit non-goals and technical risks
+  specs:
+    - Use Given/When/Then scenarios
+    - Focus on observable system behavior instead of implementation details
+  design:
+    - Keep route handlers thin
+    - Prefer Prisma as the primary data access abstraction
+    - Explain how external book data is normalized before persistence
+  tasks:
+    - Break work into small, verifiable increments
+    - Separate project setup, backend, frontend, and validation tasks clearly

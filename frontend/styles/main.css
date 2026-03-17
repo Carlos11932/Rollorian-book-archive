@@ -1,0 +1,361 @@
+:root {
+  --bg: #f4efe8;
+  --panel: rgba(255, 250, 244, 0.94);
+  --panel-strong: #fffdf8;
+  --border: rgba(73, 47, 28, 0.16);
+  --text: #24170e;
+  --muted: #6f5947;
+  --accent: #b55c32;
+  --accent-dark: #8d4320;
+  --success: #386641;
+  --danger: #b00020;
+  --shadow: 0 24px 70px rgba(63, 33, 17, 0.12);
+  --radius-lg: 24px;
+  --radius-md: 16px;
+  --radius-sm: 10px;
+  --space-1: 0.5rem;
+  --space-2: 0.75rem;
+  --space-3: 1rem;
+  --space-4: 1.5rem;
+  --space-5: 2rem;
+  --font-display: Georgia, "Times New Roman", serif;
+  --font-body: "Trebuchet MS", "Segoe UI", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--font-body);
+  color: var(--text);
+  background:
+    radial-gradient(circle at top left, rgba(181, 92, 50, 0.18), transparent 28%),
+    radial-gradient(circle at top right, rgba(87, 126, 104, 0.18), transparent 24%),
+    linear-gradient(180deg, #f9f3ea 0%, var(--bg) 100%);
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+.page-shell {
+  width: min(1180px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: 2rem 0 3rem;
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: var(--space-4);
+  align-items: stretch;
+  margin-bottom: var(--space-5);
+}
+
+.hero h1,
+.panel h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  line-height: 1.05;
+}
+
+.hero h1 {
+  font-size: clamp(2.3rem, 6vw, 4.8rem);
+  max-width: 11ch;
+}
+
+.eyebrow,
+.panel-kicker,
+.hero-card-label {
+  margin: 0 0 var(--space-2);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--accent-dark);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.hero-copy {
+  max-width: 60ch;
+  color: var(--muted);
+  font-size: 1.05rem;
+}
+
+.hero-card,
+.panel,
+.book-card {
+  background: var(--panel);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  border-radius: var(--radius-lg);
+}
+
+.hero-card,
+.panel {
+  padding: var(--space-4);
+}
+
+.hero-card ul {
+  margin: 0;
+  padding-left: 1.1rem;
+  display: grid;
+  gap: var(--space-2);
+  color: var(--muted);
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+.panel-header,
+.actions-row,
+.filters-grid {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.panel-header,
+.actions-row {
+  justify-content: space-between;
+  align-items: center;
+}
+
+.stack-gap {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.filters-grid {
+  margin: var(--space-3) 0;
+  align-items: end;
+}
+
+.field {
+  display: grid;
+  gap: 0.4rem;
+  flex: 1;
+}
+
+.field span {
+  font-size: 0.88rem;
+  color: var(--muted);
+}
+
+.field input,
+.field select,
+.book-notes {
+  width: 100%;
+  border: 1px solid rgba(73, 47, 28, 0.18);
+  background: var(--panel-strong);
+  border-radius: var(--radius-sm);
+  padding: 0.85rem 0.95rem;
+  color: var(--text);
+}
+
+.field input:focus,
+.field select:focus,
+.book-notes:focus {
+  outline: 2px solid rgba(181, 92, 50, 0.25);
+  border-color: var(--accent);
+}
+
+.button {
+  border: 0;
+  border-radius: 999px;
+  padding: 0.8rem 1.2rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 160ms ease, background 160ms ease, opacity 160ms ease;
+}
+
+.button:hover {
+  transform: translateY(-1px);
+}
+
+.button:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+
+.button-primary {
+  background: var(--accent);
+  color: #fff8f4;
+}
+
+.button-primary:hover {
+  background: var(--accent-dark);
+}
+
+.button-secondary {
+  background: #eaded1;
+  color: var(--text);
+}
+
+.button-danger {
+  background: rgba(176, 0, 32, 0.12);
+  color: var(--danger);
+}
+
+.feedback {
+  min-height: 1.3rem;
+  color: var(--muted);
+}
+
+.feedback.error {
+  color: var(--danger);
+}
+
+.feedback.success {
+  color: var(--success);
+}
+
+.card-grid {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.card-grid:empty::before {
+  content: 'Nothing here yet.';
+  display: block;
+  padding: 1.1rem;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px dashed rgba(73, 47, 28, 0.18);
+  border-radius: var(--radius-md);
+  color: var(--muted);
+}
+
+.book-card {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  animation: fade-slide 220ms ease;
+}
+
+.book-cover-wrap {
+  position: relative;
+  width: 110px;
+  height: 160px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: linear-gradient(180deg, #ead8c5 0%, #dbc3ad 100%);
+  border: 1px solid rgba(73, 47, 28, 0.14);
+}
+
+.book-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: none;
+}
+
+.book-cover.has-image {
+  display: block;
+}
+
+.cover-fallback {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: rgba(36, 23, 14, 0.62);
+  font-family: var(--font-display);
+  text-align: center;
+  padding: 1rem;
+}
+
+.book-content {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.book-title {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.book-meta,
+.book-inline-meta {
+  color: var(--muted);
+}
+
+.book-inline-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  font-size: 0.95rem;
+}
+
+.status-row,
+.book-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  align-items: center;
+}
+
+.status-select {
+  max-width: 180px;
+}
+
+.book-notes {
+  min-height: 94px;
+  resize: vertical;
+}
+
+@keyframes fade-slide {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 900px) {
+  .hero,
+  .content-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .page-shell {
+    width: min(100% - 1rem, 100%);
+    padding-top: 1rem;
+  }
+
+  .panel,
+  .hero-card {
+    padding: var(--space-3);
+  }
+
+  .book-card {
+    grid-template-columns: 1fr;
+  }
+
+  .book-cover-wrap {
+    width: 100%;
+    max-width: 180px;
+    height: 240px;
+  }
+
+  .actions-row,
+  .panel-header,
+  .filters-grid {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

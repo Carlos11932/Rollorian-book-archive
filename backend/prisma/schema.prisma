@@ -1,0 +1,25 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:../data/rollorian.db"
+}
+
+model Book {
+  id             Int      @id @default(autoincrement())
+  externalSource String
+  externalId     String
+  title          String
+  authors        String
+  publishedYear  Int?
+  isbn           String?
+  coverUrl       String?
+  status         String   @default("wishlist")
+  notes          String   @default("")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@unique([externalSource, externalId])
+}
