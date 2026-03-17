@@ -6,3 +6,9 @@ backend/data/*.db-wal
 backend/generated/
 backend/test-artifacts/
 npm-debug.log*
+.agent/
+.claude/
+.codex/
+.github/
+.opencode/
+*.heapsnapshot
