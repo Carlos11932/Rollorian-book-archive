@@ -1,13 +1,14 @@
 const HttpError = require('../../lib/httpError');
 
 const GOOGLE_BOOKS_URL = 'https://www.googleapis.com/books/v1/volumes';
-const SEARCH_LIMIT = 10;
+const DEFAULT_SEARCH_LIMIT = 10;
 
-async function fetchBooks(query) {
+async function fetchBooks(query, options = {}) {
   const url = new URL(GOOGLE_BOOKS_URL);
   url.searchParams.set('q', query);
-  url.searchParams.set('maxResults', String(SEARCH_LIMIT));
+  url.searchParams.set('maxResults', String(options.maxResults || DEFAULT_SEARCH_LIMIT));
   url.searchParams.set('printType', 'books');
+  url.searchParams.set('orderBy', 'relevance');
 
   if (process.env.GOOGLE_BOOKS_API_KEY) {
     url.searchParams.set('key', process.env.GOOGLE_BOOKS_API_KEY);

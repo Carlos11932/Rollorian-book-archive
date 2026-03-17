@@ -30,11 +30,15 @@ test('GET /api/search/books rejects too-short queries', async () => {
 
 test('GET /api/search/books returns normalized payload', async () => {
   const originalFetch = global.fetch;
+  let requestUrl;
 
-  global.fetch = async () => ({
-    ok: true,
-    async json() {
-      return {
+  global.fetch = async (url) => {
+    requestUrl = url;
+
+    return {
+      ok: true,
+      async json() {
+        return {
         items: [
           {
             id: 'google-volume-1',
@@ -56,12 +60,16 @@ test('GET /api/search/books returns normalized payload', async () => {
         ]
       };
     }
-  });
+    };
+  };
 
   try {
     const response = await request(app).get('/api/search/books').query({ q: 'earthsea' });
 
     assert.equal(response.status, 200);
+    assert.equal(requestUrl.searchParams.get('q'), 'earthsea');
+    assert.equal(requestUrl.searchParams.get('orderBy'), 'relevance');
+    assert.equal(requestUrl.searchParams.get('maxResults'), '20');
     assert.deepEqual(response.body.items, [
       {
         externalSource: 'google_books',
@@ -73,6 +81,141 @@ test('GET /api/search/books returns normalized payload', async () => {
         coverUrl: 'https://books.google.com/books/content?id=google-volume-1&printsec=frontcover&img=1&zoom=1'
       }
     ]);
+  } finally {
+    global.fetch = originalFetch;
+  }
+});
+
+test('GET /api/search/books uses precise Google Books ISBN query', async () => {
+  const originalFetch = global.fetch;
+  let requestUrl;
+
+  global.fetch = async (url) => {
+    requestUrl = url;
+
+    return {
+      ok: true,
+      async json() {
+        return {
+          items: [
+            {
+              id: 'matching-isbn',
+              volumeInfo: {
+                title: 'A Wizard of Earthsea',
+                authors: ['Ursula K. Le Guin'],
+                industryIdentifiers: [
+                  {
+                    type: 'ISBN_13',
+                    identifier: '9780547773742'
+                  }
+                ]
+              }
+            },
+            {
+              id: 'different-book',
+              volumeInfo: {
+                title: 'Some Other Book',
+                authors: ['Someone Else'],
+                industryIdentifiers: [
+                  {
+                    type: 'ISBN_13',
+                    identifier: '9780000000002'
+                  }
+                ]
+              }
+            }
+          ]
+        };
+      }
+    };
+  };
+
+  try {
+    const response = await request(app).get('/api/search/books').query({ q: '978-0547773742' });
+
+    assert.equal(response.status, 200);
+    assert.equal(requestUrl.searchParams.get('q'), 'isbn:9780547773742');
+    assert.equal(requestUrl.searchParams.get('maxResults'), '10');
+    assert.equal(response.body.items.length, 1);
+    assert.equal(response.body.items[0].externalId, 'matching-isbn');
+  } finally {
+    global.fetch = originalFetch;
+  }
+});
+
+test('GET /api/search/books recognizes title by author queries', async () => {
+  const originalFetch = global.fetch;
+  let requestUrl;
+
+  global.fetch = async (url) => {
+    requestUrl = url;
+
+    return {
+      ok: true,
+      async json() {
+        return { items: [] };
+      }
+    };
+  };
+
+  try {
+    const response = await request(app).get('/api/search/books').query({ q: 'Dune by Frank Herbert' });
+
+    assert.equal(response.status, 200);
+    assert.equal(requestUrl.searchParams.get('q'), 'intitle:"Dune" inauthor:"Frank Herbert"');
+  } finally {
+    global.fetch = originalFetch;
+  }
+});
+
+test('GET /api/search/books reranks noisy text results', async () => {
+  const originalFetch = global.fetch;
+
+  global.fetch = async () => ({
+    ok: true,
+    async json() {
+      return {
+        items: [
+          {
+            id: 'noisy-result',
+            volumeInfo: {
+              title: 'The Worlds of Dune',
+              authors: ['Library Journal']
+            }
+          },
+          {
+            id: 'best-match',
+            volumeInfo: {
+              title: 'Dune',
+              authors: ['Frank Herbert'],
+              industryIdentifiers: [
+                {
+                  type: 'ISBN_13',
+                  identifier: '9780441013593'
+                }
+              ]
+            }
+          },
+          {
+            id: 'related-result',
+            volumeInfo: {
+              title: 'Dune Messiah',
+              authors: ['Frank Herbert']
+            }
+          }
+        ]
+      };
+    }
+  });
+
+  try {
+    const response = await request(app).get('/api/search/books').query({ q: 'Dune Frank Herbert' });
+
+    assert.equal(response.status, 200);
+    assert.deepEqual(
+      response.body.items.map((item) => item.externalId),
+      ['best-match', 'related-result', 'noisy-result']
+    );
   } finally {
     global.fetch = originalFetch;
   }

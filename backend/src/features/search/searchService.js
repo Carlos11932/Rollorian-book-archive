@@ -1,6 +1,7 @@
 const HttpError = require('../../lib/httpError');
 const { fetchBooks } = require('./googleBooksClient');
 const { normalizeSearchResults } = require('./normalizeBooks');
+const { analyzeQuery, rankSearchResults } = require('./searchStrategy');
 
 async function searchBooks(rawQuery) {
   const query = String(rawQuery || '').trim();
@@ -9,8 +10,12 @@ async function searchBooks(rawQuery) {
     throw new HttpError(400, 'A valid query with at least 2 characters is required');
   }
 
-  const docs = await fetchBooks(query);
-  return normalizeSearchResults(docs);
+  const analysis = analyzeQuery(query);
+  const docs = await fetchBooks(analysis.googleQuery, {
+    maxResults: analysis.providerMaxResults
+  });
+
+  return rankSearchResults(normalizeSearchResults(docs), analysis);
 }
 
 module.exports = {

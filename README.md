@@ -25,6 +25,12 @@ Rollorian Book Archive is a small full-stack personal library app. It lets one u
 5. Prisma persists the local collection in SQLite.
 6. The frontend reads and manages saved books through the `/api/books` endpoints.
 
+Search requests keep the same API contract, but the backend now applies a few deterministic quality heuristics before returning results:
+
+- ISBN-like queries are converted into precise `isbn:` lookups.
+- Queries shaped like `title by author` are sent to Google Books as `intitle:` + `inauthor:` searches.
+- General free-text queries still use Google Books relevance ordering, then get a lightweight local rerank so exact title and author matches rise above noisier results.
+
 ## Getting Started
 
 1. Run the first-time setup workflow from the repo root:
