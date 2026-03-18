@@ -1,6 +1,6 @@
 import { formatAuthors, formatIsbn, formatYear, statusLabel } from './formatters.js';
 import { BOOK_STATUSES } from './constants.js';
-import { createElement, createFragment, escapeHtml } from './dom.js';
+import { createElement, createEmptyState, createFragment, createRailSection, escapeHtml } from './dom.js';
 
 function createCoverMarkup(book, tone = 'warm') {
   const imageMarkup = book.coverUrl
@@ -15,19 +15,61 @@ function createCoverMarkup(book, tone = 'warm') {
   `;
 }
 
-function createSearchResultCard(book, onSave) {
+function createPosterMeta(book) {
+  return `
+    <div class="book-inline-meta poster-meta">
+      <span>${escapeHtml(formatYear(book.publishedYear))}</span>
+      <span>${escapeHtml(formatIsbn(book.isbn))}</span>
+    </div>
+  `;
+}
+
+function createBrowseBookCard(book, options = {}) {
+  const badge = options.badge || statusLabel(book.status);
+  const actionLabel = options.actionLabel || 'Open details';
+
   const card = createElement(`
-    <article class="book-card search-card">
-      ${createCoverMarkup(book, 'cool')}
+    <article class="book-card poster-card browse-card">
+      ${createCoverMarkup(book, options.tone || 'cool')}
       <div class="book-content">
         <div class="book-heading-block">
+          <div class="book-card-topline">
+            <span class="status-pill subtle">${escapeHtml(badge)}</span>
+          </div>
           <h3 class="book-title">${escapeHtml(book.title)}</h3>
           <p class="book-meta">${escapeHtml(formatAuthors(book.authors))}</p>
         </div>
-        <div class="book-inline-meta">
-          <span>${escapeHtml(formatYear(book.publishedYear))}</span>
-          <span>${escapeHtml(formatIsbn(book.isbn))}</span>
+        ${createPosterMeta(book)}
+        <div class="book-actions compact-actions">
+          <a class="button button-secondary" href="#/books/${book.id}">${escapeHtml(actionLabel)}</a>
         </div>
+      </div>
+    </article>
+  `);
+
+  if (typeof options.onOpen === 'function') {
+    card.querySelector('a').addEventListener('click', (event) => {
+      event.preventDefault();
+      options.onOpen(book.id);
+    });
+  }
+
+  return card;
+}
+
+function createSearchResultCard(book, onSave) {
+  const card = createElement(`
+    <article class="book-card poster-card search-card">
+      ${createCoverMarkup(book, 'cool')}
+      <div class="book-content">
+        <div class="book-heading-block">
+          <div class="book-card-topline">
+            <span class="status-pill subtle">Search result</span>
+          </div>
+          <h3 class="book-title">${escapeHtml(book.title)}</h3>
+          <p class="book-meta">${escapeHtml(formatAuthors(book.authors))}</p>
+        </div>
+        ${createPosterMeta(book)}
         <div class="book-actions">
           <button type="button" class="button button-primary">Save to library</button>
         </div>
@@ -61,21 +103,20 @@ function createStatusOptions(currentStatus) {
 
 function createLibraryBookCard(book, handlers) {
   const card = createElement(`
-    <article class="book-card library-card">
+    <article class="book-card poster-card library-card">
       ${createCoverMarkup(book)}
       <div class="book-content">
         <div class="book-heading-row">
           <div class="book-heading-block">
+            <div class="book-card-topline">
+              <span class="status-pill subtle">${escapeHtml(statusLabel(book.status))}</span>
+            </div>
             <h3 class="book-title">${escapeHtml(book.title)}</h3>
             <p class="book-meta">${escapeHtml(formatAuthors(book.authors))}</p>
           </div>
           <a class="inline-link" href="#/books/${book.id}">Details</a>
         </div>
-        <div class="book-inline-meta">
-          <span>${escapeHtml(formatYear(book.publishedYear))}</span>
-          <span>${escapeHtml(formatIsbn(book.isbn))}</span>
-          <span class="status-pill subtle">${escapeHtml(statusLabel(book.status))}</span>
-        </div>
+        ${createPosterMeta(book)}
         <div class="library-card-controls">
           <label class="field status-select">
             <span>Status</span>
@@ -142,7 +183,7 @@ function createStatusSummary(itemsByStatus) {
     const count = itemsByStatus[status] || 0;
     fragment.appendChild(
       createElement(`
-        <article class="summary-card">
+        <article class="summary-card stat-card">
           <p class="eyebrow">${escapeHtml(statusLabel(status))}</p>
           <strong>${count}</strong>
           <span>${count === 1 ? 'book' : 'books'}</span>
@@ -202,8 +243,34 @@ function createBookFacts(book) {
   `);
 }
 
+function createBookRailSection(config) {
+  const rail = createRailSection({
+    eyebrow: config.eyebrow,
+    title: config.title,
+    copy: config.copy,
+    actionMarkup: config.actionMarkup,
+    sectionClass: config.sectionClass,
+    trackClass: config.trackClass || 'rail-track'
+  });
+  const track = rail.querySelector('[data-rail-track]');
+
+  if (!config.items || config.items.length === 0) {
+    track.appendChild(createEmptyState(config.emptyTitle, config.emptyCopy));
+    track.classList.add('is-empty');
+    return rail;
+  }
+
+  config.items.forEach((item) => {
+    track.appendChild(config.renderCard(item));
+  });
+
+  return rail;
+}
+
 export {
   createBookFacts,
+  createBookRailSection,
+  createBrowseBookCard,
   createLibraryBookCard,
   createMiniBookList,
   createSearchResultCard,

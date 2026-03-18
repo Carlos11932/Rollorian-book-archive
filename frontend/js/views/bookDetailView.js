@@ -15,23 +15,27 @@ async function renderBookDetailView(context, route) {
 
   const view = createElement(`
     <section class="view-stack detail-view">
-      <section class="detail-header panel">
+      <section class="detail-header panel cinematic-detail-header">
         <a class="inline-link" href="#/library">Back to library</a>
-          <div class="detail-hero">
-            <div class="detail-cover-wrap ${book.coverUrl ? 'has-image' : ''}">
+        <div class="detail-hero">
+          <div class="detail-cover-wrap ${book.coverUrl ? 'has-image' : ''}">
             ${book.coverUrl ? `<img class="detail-cover" src="${escapeHtml(book.coverUrl)}" alt="${escapeHtml(book.title)} cover" />` : '<div class="cover-fallback">No cover</div>'}
-            </div>
-            <div class="detail-copy">
-              <p class="eyebrow">Book detail</p>
+          </div>
+          <div class="detail-copy">
+            <p class="eyebrow">Book detail</p>
             <h1>${escapeHtml(book.title)}</h1>
-            <p class="detail-subcopy">Local book record with status, notes, and the metadata you actually need.</p>
+            <div class="detail-status-row">
+              <span class="status-pill">${escapeHtml(statusLabel(book.status))}</span>
+              <span class="detail-meta-chip">${escapeHtml(book.externalSource)}</span>
+            </div>
+            <p class="detail-subcopy">Keep status, notes, and metadata in one focused screen without breaking the existing local-library flow.</p>
             <div class="detail-facts-host"></div>
           </div>
         </div>
       </section>
 
       <section class="dashboard-grid detail-grid">
-        <section class="panel stack-gap">
+        <section class="panel stack-gap detail-manage-panel">
           <div class="panel-header aligned-start">
             <div>
               <p class="eyebrow">Manage</p>
@@ -56,7 +60,7 @@ async function renderBookDetailView(context, route) {
           </form>
         </section>
 
-        <section class="panel stack-gap">
+        <section class="panel stack-gap detail-metadata-panel">
           <div class="panel-header aligned-start">
             <div>
               <p class="eyebrow">Metadata</p>
@@ -74,11 +78,11 @@ async function renderBookDetailView(context, route) {
             </div>
             <div>
               <dt>Created</dt>
-              <dd>${new Date(book.createdAt).toLocaleString()}</dd>
+              <dd>${escapeHtml(new Date(book.createdAt).toLocaleString())}</dd>
             </div>
             <div>
               <dt>Updated</dt>
-              <dd>${new Date(book.updatedAt).toLocaleString()}</dd>
+              <dd>${escapeHtml(new Date(book.updatedAt).toLocaleString())}</dd>
             </div>
           </dl>
         </section>

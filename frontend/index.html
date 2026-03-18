@@ -6,8 +6,14 @@
     <title>Rollorian Book Archive</title>
     <link rel="stylesheet" href="/styles/main.css" />
   </head>
-  <body>
-    <div class="app-shell">
+  <body data-route="boot">
+    <div class="page-backdrop" aria-hidden="true">
+      <div class="page-backdrop-glow glow-left"></div>
+      <div class="page-backdrop-glow glow-right"></div>
+      <div class="page-backdrop-grid"></div>
+    </div>
+
+    <div class="app-shell" data-shell>
       <header class="site-header">
         <div class="brand-block">
           <a class="brand-link" href="#/">
@@ -17,7 +23,7 @@
               <strong>Book Archive</strong>
             </span>
           </a>
-          <p class="brand-copy">A local-first reading archive with clean routes, real views, and zero frontend framework drama.</p>
+          <p class="brand-copy">A local-first screening room for your reading life. Search globally, curate locally, and move between routes without losing the plot.</p>
         </div>
 
         <nav class="site-nav" aria-label="Primary">
@@ -26,6 +32,19 @@
           <a href="#/library" data-nav-link="/library">Library</a>
         </nav>
       </header>
+
+      <section class="shell-banner" aria-label="Current section overview">
+        <div class="shell-copy-block">
+          <p id="shell-route-kicker" class="eyebrow">Cinematic catalog</p>
+          <h1 id="shell-route-title">Your next read lives here.</h1>
+          <p id="shell-route-copy" class="shell-route-copy">Browse a cover-first archive without touching the backend contract or the existing hash-routed flows.</p>
+        </div>
+        <div class="shell-stats" aria-hidden="true">
+          <div class="shell-stat-pill">Hash routes intact</div>
+          <div class="shell-stat-pill">Express API untouched</div>
+          <div class="shell-stat-pill">Local library focus</div>
+        </div>
+      </section>
 
       <main id="app" class="app-main" aria-live="polite"></main>
     </div>

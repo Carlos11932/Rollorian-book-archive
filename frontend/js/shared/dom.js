@@ -37,10 +37,34 @@ function createEmptyState(title, copy) {
   `);
 }
 
+function createSectionHeading({ eyebrow = '', title, copy = '', actionMarkup = '' }) {
+  return `
+    <div class="section-heading">
+      <div class="section-heading-copy">
+        ${eyebrow ? `<p class="eyebrow">${escapeHtml(eyebrow)}</p>` : ''}
+        <h2>${escapeHtml(title)}</h2>
+        ${copy ? `<p>${escapeHtml(copy)}</p>` : ''}
+      </div>
+      ${actionMarkup ? `<div class="section-heading-actions">${actionMarkup}</div>` : ''}
+    </div>
+  `;
+}
+
+function createRailSection({ eyebrow = '', title, copy = '', actionMarkup = '', sectionClass = '', trackClass = 'rail-track' }) {
+  return createElement(`
+    <section class="rail-section ${escapeHtml(sectionClass).trim()}">
+      ${createSectionHeading({ eyebrow, title, copy, actionMarkup })}
+      <div class="${escapeHtml(trackClass)}" data-rail-track></div>
+    </section>
+  `);
+}
+
 export {
   escapeHtml,
   createElement,
   createFragment,
   createEmptyState,
+  createRailSection,
+  createSectionHeading,
   setFeedback
 };

@@ -1,6 +1,6 @@
 import { saveBook, searchBooks } from '../shared/api.js';
 import { createSearchResultCard } from '../shared/bookCard.js';
-import { createElement, escapeHtml, setFeedback } from '../shared/dom.js';
+import { createElement, createEmptyState, escapeHtml, setFeedback } from '../shared/dom.js';
 
 async function renderSearchView(context, route) {
   const initialQuery = route.query.q || '';
@@ -10,7 +10,8 @@ async function renderSearchView(context, route) {
         <div class="panel-header aligned-start">
           <div>
             <p class="eyebrow">Search</p>
-            <h1>Search the external catalog without leaving your own app.</h1>
+            <h1>Search the external catalog, then save straight into your own archive.</h1>
+            <p class="hero-text">The API contract stays backend-owned. The UI just stops looking like an afterthought.</p>
           </div>
           <div class="hero-chip">Backend-only Google Books</div>
         </div>
@@ -28,14 +29,14 @@ async function renderSearchView(context, route) {
         </form>
       </section>
 
-      <section class="panel stack-gap">
-        <div class="panel-header aligned-start">
-          <div>
+      <section class="rail-section search-results-section">
+        <div class="section-heading">
+          <div class="section-heading-copy">
             <p class="eyebrow">Results</p>
             <h2>Candidate books</h2>
           </div>
         </div>
-        <div class="card-grid" data-results></div>
+        <div class="rail-track search-results-track" data-results></div>
       </section>
     </section>
   `);
@@ -51,6 +52,7 @@ async function renderSearchView(context, route) {
 
     if (!trimmedQuery) {
       results.innerHTML = '';
+      results.appendChild(createEmptyState('Start with a real query', 'Search by title, author, or ISBN to load this rail with candidate books.'));
       setFeedback(feedback, 'Type something useful first.');
       return;
     }
@@ -63,6 +65,7 @@ async function renderSearchView(context, route) {
       const items = payload.items || [];
 
       if (items.length === 0) {
+        results.appendChild(createEmptyState('No matches', 'Try a different title, author, or ISBN query.'));
         setFeedback(feedback, 'No matching books found.');
         return;
       }
@@ -100,12 +103,15 @@ async function renderSearchView(context, route) {
   clearButton.addEventListener('click', () => {
     input.value = '';
     results.innerHTML = '';
+    results.appendChild(createEmptyState('Search cleared', 'Run another query to populate the discovery rail again.'));
     setFeedback(feedback, 'Search cleared.');
     context.navigate('/search', { replace: true });
   });
 
   if (initialQuery) {
     await performSearch(initialQuery);
+  } else {
+    results.appendChild(createEmptyState('Start with a real query', 'Search by title, author, or ISBN to load this rail with candidate books.'));
   }
 
   return view;
