@@ -36,7 +36,7 @@ async function renderSearchView(context, route) {
             <h2>Candidate books</h2>
           </div>
         </div>
-        <div class="rail-track search-results-track" data-results></div>
+        <div class="search-grid" data-results></div>
       </section>
     </section>
   `);
@@ -70,7 +70,7 @@ async function renderSearchView(context, route) {
         return;
       }
 
-      items.forEach((book) => {
+      items.forEach((book, index) => {
         const card = createSearchResultCard(book, async (selectedBook) => {
           try {
             await saveBook(selectedBook);
@@ -79,7 +79,7 @@ async function renderSearchView(context, route) {
             setFeedback(feedback, error.message, 'error');
             throw error;
           }
-        });
+        }, index);
 
         results.appendChild(card);
       });

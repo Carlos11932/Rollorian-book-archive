@@ -50,9 +50,14 @@ async function renderHomeView(context) {
     return groups;
   }, {});
 
+  const heroBackdropStyle = featuredBook && featuredBook.coverUrl
+    ? `background-image: url('${escapeHtml(featuredBook.coverUrl)}')`
+    : '';
+
   const section = createElement(`
     <section class="view-stack home-view">
       <section class="hero-panel">
+        <div class="hero-backdrop" ${heroBackdropStyle ? `style="${heroBackdropStyle}"` : ''} aria-hidden="true"></div>
         <div class="hero-copy-block">
           <p class="eyebrow">Tonight in your archive</p>
           <h1>Browse your reading life like a curated catalog, not a spreadsheet accident.</h1>
@@ -154,9 +159,10 @@ async function renderHomeView(context) {
           items: booksByStatus[status],
           emptyTitle: `No ${statusLabel(status).toLowerCase()} books`,
           emptyCopy: emptyRailCopy(status),
-          renderCard: (book) => createBrowseBookCard(book, {
+          renderCard: (book, index) => createBrowseBookCard(book, {
             badge: statusLabel(book.status),
             tone: status === 'reading' ? 'warm' : 'cool',
+            index,
             onOpen: (id) => context.navigate(`/books/${id}`)
           })
         })

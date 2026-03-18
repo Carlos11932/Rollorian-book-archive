@@ -15,6 +15,16 @@ function createCoverMarkup(book, tone = 'warm') {
   `;
 }
 
+function createCardOverlay(book) {
+  return `
+    <div class="card-overlay" aria-hidden="true">
+      <p class="overlay-title">${escapeHtml(book.title)}</p>
+      <p class="overlay-author">${escapeHtml(formatAuthors(book.authors))}</p>
+      <a class="button button-primary overlay-detail-btn" href="#/books/${book.id}">Ver detalles</a>
+    </div>
+  `;
+}
+
 function createPosterMeta(book) {
   return `
     <div class="book-inline-meta poster-meta">
@@ -27,9 +37,10 @@ function createPosterMeta(book) {
 function createBrowseBookCard(book, options = {}) {
   const badge = options.badge || statusLabel(book.status);
   const actionLabel = options.actionLabel || 'Open details';
+  const index = options.index ?? 0;
 
   const card = createElement(`
-    <article class="book-card poster-card browse-card">
+    <article class="book-card poster-card browse-card" style="--i: ${index}">
       ${createCoverMarkup(book, options.tone || 'cool')}
       <div class="book-content">
         <div class="book-heading-block">
@@ -44,22 +55,30 @@ function createBrowseBookCard(book, options = {}) {
           <a class="button button-secondary" href="#/books/${book.id}">${escapeHtml(actionLabel)}</a>
         </div>
       </div>
+      ${createCardOverlay(book)}
     </article>
   `);
 
   if (typeof options.onOpen === 'function') {
-    card.querySelector('a').addEventListener('click', (event) => {
+    card.querySelector('.book-actions a').addEventListener('click', (event) => {
       event.preventDefault();
       options.onOpen(book.id);
     });
+    const overlayBtn = card.querySelector('.overlay-detail-btn');
+    if (overlayBtn) {
+      overlayBtn.addEventListener('click', (event) => {
+        event.preventDefault();
+        options.onOpen(book.id);
+      });
+    }
   }
 
   return card;
 }
 
-function createSearchResultCard(book, onSave) {
+function createSearchResultCard(book, onSave, index = 0) {
   const card = createElement(`
-    <article class="book-card poster-card search-card">
+    <article class="book-card poster-card search-card" style="--i: ${index}">
       ${createCoverMarkup(book, 'cool')}
       <div class="book-content">
         <div class="book-heading-block">
@@ -74,6 +93,7 @@ function createSearchResultCard(book, onSave) {
           <button type="button" class="button button-primary">Save to library</button>
         </div>
       </div>
+      ${createCardOverlay(book)}
     </article>
   `);
 
@@ -101,9 +121,9 @@ function createStatusOptions(currentStatus) {
   ).join('');
 }
 
-function createLibraryBookCard(book, handlers) {
+function createLibraryBookCard(book, handlers, index = 0) {
   const card = createElement(`
-    <article class="book-card poster-card library-card">
+    <article class="book-card poster-card library-card" style="--i: ${index}">
       ${createCoverMarkup(book)}
       <div class="book-content">
         <div class="book-heading-row">
@@ -260,8 +280,15 @@ function createBookRailSection(config) {
     return rail;
   }
 
-  config.items.forEach((item) => {
-    track.appendChild(config.renderCard(item));
+  config.items.forEach((item, index) => {
+    track.appendChild(config.renderCard(item, index));
+  });
+
+  // Add overflow detection for fade edges
+  requestAnimationFrame(() => {
+    if (track.scrollWidth > track.clientWidth) {
+      rail.classList.add('has-overflow');
+    }
   });
 
   return rail;

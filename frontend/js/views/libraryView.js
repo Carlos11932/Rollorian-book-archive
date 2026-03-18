@@ -121,7 +121,7 @@ async function renderLibraryView(context, route) {
             emptyCopy: activeStatus === 'all'
               ? 'That shelf is empty right now.'
               : 'Try another filter or save something from Search.',
-            renderCard: (book) => createLibraryBookCard(book, {
+            renderCard: (book, index) => createLibraryBookCard(book, {
               onSave: async (id, changes) => {
                 await updateBook(id, changes);
                 await loadBooks(`Updated "${book.title}".`, 'success');
@@ -133,7 +133,7 @@ async function renderLibraryView(context, route) {
               onOpen: (id) => {
                 context.navigate(`/books/${id}`);
               }
-            })
+            }, index)
           })
         );
       });

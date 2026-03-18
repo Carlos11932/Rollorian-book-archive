@@ -15,6 +15,7 @@
   --success: #7ed48c;
   --danger: #ff8888;
   --shadow: 0 32px 80px rgba(0, 0, 0, 0.38);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.6);
   --radius-xl: 32px;
   --radius-lg: 24px;
   --radius-md: 18px;
@@ -234,6 +235,7 @@ a {
 
 .site-nav a {
   color: var(--muted);
+  transition: color 200ms ease, background 200ms ease, border-color 200ms ease;
 }
 
 .site-nav a.is-active,
@@ -270,7 +272,19 @@ a {
   justify-content: flex-end;
 }
 
-.hero-panel,
+/* ── Hero panel – Netflix full-width banner ── */
+
+.hero-panel {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+  border-radius: var(--radius-xl);
+  padding: 0;
+  overflow: hidden;
+  position: relative;
+  min-height: 420px;
+}
+
 .detail-header {
   display: grid;
   grid-template-columns: minmax(0, 1.7fr) minmax(280px, 0.85fr);
@@ -290,6 +304,58 @@ a {
   height: 24rem;
   background: radial-gradient(circle, rgba(214, 59, 47, 0.22), transparent 68%);
   pointer-events: none;
+}
+
+/* Hero backdrop image */
+.hero-backdrop {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  z-index: 0;
+  opacity: 0.45;
+  transition: opacity 500ms ease;
+}
+
+.hero-backdrop::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to right, var(--bg) 30%, transparent 70%),
+    linear-gradient(to top, var(--bg) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+/* Hero content sits above backdrop */
+.hero-copy-block {
+  position: relative;
+  z-index: 2;
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  max-width: 42rem;
+}
+
+.hero-aside {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  align-content: start;
+  gap: 0.6rem;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(214, 59, 47, 0.1));
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  margin: 0 clamp(1.5rem, 4vw, 2.5rem) clamp(1.5rem, 4vw, 2.5rem) 0;
+  justify-self: end;
+  align-self: end;
+  min-width: 260px;
+  backdrop-filter: blur(12px);
+}
+
+.hero-aside strong {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 3vw, 2.7rem);
 }
 
 .hero-actions,
@@ -317,34 +383,6 @@ a {
   flex-wrap: wrap;
 }
 
-.panel,
-.empty-route,
-.rail-section {
-  padding: var(--space-4);
-  border-radius: var(--radius-lg);
-}
-
-.hero-aside,
-.summary-card,
-.route-card,
-.empty-state {
-  border-radius: var(--radius-lg);
-  padding: var(--space-4);
-}
-
-.hero-aside {
-  display: grid;
-  align-content: start;
-  gap: 0.6rem;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(214, 59, 47, 0.1));
-  border: 1px solid var(--line);
-}
-
-.hero-aside strong {
-  font-family: var(--font-display);
-  font-size: clamp(1.8rem, 3vw, 2.7rem);
-}
-
 .eyebrow {
   margin: 0;
   text-transform: uppercase;
@@ -352,6 +390,20 @@ a {
   font-size: 0.74rem;
   font-weight: 700;
   color: var(--gold);
+}
+
+.panel,
+.empty-route,
+.rail-section {
+  padding: var(--space-4);
+  border-radius: var(--radius-lg);
+}
+
+.summary-card,
+.route-card,
+.empty-state {
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
 }
 
 .panel-header,
@@ -409,6 +461,7 @@ a {
 .status-tab {
   cursor: pointer;
   color: var(--muted);
+  transition: color 200ms ease, background 200ms ease, border-color 200ms ease;
 }
 
 .field {
@@ -468,7 +521,6 @@ a {
 .button:hover,
 .route-card:hover,
 .site-nav a:hover,
-.book-card:hover,
 .inline-link:hover {
   transform: translateY(-1px);
 }
@@ -512,9 +564,43 @@ a {
   color: var(--danger);
 }
 
+/* ── Rail sections – Netflix horizontal rows ── */
+
 .rail-section {
   display: grid;
   gap: var(--space-3);
+  position: relative;
+}
+
+/* Fade edges on rail containers */
+.rail-section::before,
+.rail-section::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 3rem;
+  z-index: 3;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 300ms ease;
+}
+
+.rail-section::before {
+  left: 0;
+  background: linear-gradient(to right, rgba(8, 11, 18, 0.95), transparent);
+  border-radius: var(--radius-lg) 0 0 var(--radius-lg);
+}
+
+.rail-section::after {
+  right: 0;
+  background: linear-gradient(to left, rgba(8, 11, 18, 0.95), transparent);
+  border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+}
+
+.rail-section.has-overflow::before,
+.rail-section.has-overflow::after {
+  opacity: 1;
 }
 
 .rail-track {
@@ -524,17 +610,17 @@ a {
   gap: var(--space-3);
   overflow-x: auto;
   padding-bottom: 0.65rem;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.22) transparent;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
 }
 
 .rail-track::-webkit-scrollbar {
-  height: 10px;
+  display: none;
 }
 
-.rail-track::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.18);
-  border-radius: 999px;
+.rail-track > * {
+  scroll-snap-align: start;
 }
 
 .rail-track.is-empty {
@@ -545,19 +631,78 @@ a {
   grid-auto-columns: minmax(280px, 340px);
 }
 
+/* ── Book cards – Netflix hover effect ── */
+
 .book-card {
   display: grid;
   grid-template-columns: 118px 1fr;
   gap: var(--space-3);
   border-radius: var(--radius-lg);
   padding: var(--space-3);
-  animation: rise-in 220ms ease;
-  transition: transform 180ms ease, border-color 180ms ease;
+  position: relative;
+  transition: transform 250ms ease, border-color 250ms ease, box-shadow 250ms ease, z-index 0ms;
+  animation: fade-slide-up 350ms ease both;
+  animation-delay: calc(var(--i, 0) * 60ms);
 }
 
 .book-card:hover,
+.poster-card:hover {
+  transform: scale(1.05);
+  z-index: 10;
+  box-shadow: var(--shadow-lg);
+  border-color: rgba(255, 255, 255, 0.28);
+}
+
 .route-card:hover {
   border-color: rgba(255, 255, 255, 0.28);
+}
+
+/* Card hover overlay */
+.card-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: var(--space-3);
+  background: linear-gradient(to top, rgba(8, 11, 18, 0.92) 0%, rgba(8, 11, 18, 0.4) 50%, transparent 100%);
+  border-radius: var(--radius-lg);
+  opacity: 0;
+  transition: opacity 250ms ease;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.book-card:hover .card-overlay,
+.poster-card:hover .card-overlay {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.card-overlay .overlay-title {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 0.25rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-overlay .overlay-author {
+  font-size: 0.82rem;
+  color: var(--muted);
+  margin: 0 0 0.6rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-overlay .button {
+  padding: 0.5rem 0.9rem;
+  font-size: 0.82rem;
+  align-self: flex-start;
 }
 
 .book-cover-wrap,
@@ -719,6 +864,36 @@ a {
   border-color: rgba(242, 192, 120, 0.22);
 }
 
+/* ── Search grid layout ── */
+
+.search-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.search-grid .book-card {
+  grid-template-columns: 1fr;
+}
+
+.search-grid .book-cover-wrap {
+  width: 100%;
+  min-height: 200px;
+}
+
+/* ── Stagger animations ── */
+
+@keyframes fade-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @keyframes rise-in {
   from {
     opacity: 0;
@@ -731,9 +906,14 @@ a {
   }
 }
 
+/* ── View transition polish ── */
+
+.view-stack {
+  animation: fade-slide-up 400ms ease both;
+}
+
 @media (max-width: 1120px) {
   .shell-banner,
-  .hero-panel,
   .detail-header,
   .dashboard-grid,
   .summary-grid,
@@ -744,6 +924,11 @@ a {
 
   .rail-track {
     grid-auto-columns: minmax(260px, 82vw);
+  }
+
+  .hero-aside {
+    margin: 0 var(--space-4) var(--space-4);
+    justify-self: stretch;
   }
 }
 
@@ -781,6 +966,15 @@ a {
     padding: var(--space-3);
   }
 
+  .hero-panel {
+    padding: 0;
+    min-height: 320px;
+  }
+
+  .hero-copy-block {
+    padding: var(--space-3);
+  }
+
   .shell-banner h1,
   .hero-panel h1,
   .panel h1,
@@ -802,5 +996,15 @@ a {
   .rail-track,
   .search-results-track {
     grid-auto-columns: minmax(84vw, 1fr);
+  }
+
+  .search-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 1rem;
+  }
+
+  .rail-section::before,
+  .rail-section::after {
+    display: none;
   }
 }
