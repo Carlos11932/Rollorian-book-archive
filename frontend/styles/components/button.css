@@ -1,0 +1,49 @@
+.button,
+.inline-link {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.4rem;
+  border-radius: 999px;
+  font-weight: 700;
+}
+
+.button {
+  border: 0;
+  cursor: pointer;
+  padding: 0.84rem 1.25rem;
+  transition: transform 160ms ease, opacity 160ms ease, background 160ms ease, border-color 160ms ease;
+}
+
+.button:hover,
+.route-card:hover,
+.site-nav a:hover,
+.inline-link:hover {
+  transform: translateY(-1px);
+}
+
+.button:disabled {
+  opacity: 0.72;
+  cursor: wait;
+}
+
+.button-primary {
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-strong) 100%);
+  color: #fff6ef;
+}
+
+.button-secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text);
+  border: 1px solid var(--line);
+}
+
+.button-danger {
+  background: rgba(255, 136, 136, 0.12);
+  color: var(--danger);
+  border: 1px solid rgba(255, 136, 136, 0.18);
+}
+
+.inline-link {
+  color: var(--gold);
+}

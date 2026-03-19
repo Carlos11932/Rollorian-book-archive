@@ -1,0 +1,9 @@
+.search-results-track {
+  grid-auto-columns: minmax(280px, 340px);
+}
+
+@media (max-width: 720px) {
+  .search-results-track {
+    grid-auto-columns: minmax(84vw, 1fr);
+  }
+}

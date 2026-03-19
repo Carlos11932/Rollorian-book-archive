@@ -1,0 +1,57 @@
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.brand-link strong,
+.hero-panel h1,
+.panel h1,
+.panel h2,
+.empty-route h1,
+.shell-banner h1,
+.book-title,
+.rail-section h2,
+.empty-state h3 {
+  margin: 0;
+  font-family: var(--font-display);
+}
+
+.brand-copy,
+.hero-text,
+.detail-subcopy,
+.empty-state p,
+.route-card p,
+.shell-route-copy,
+.section-heading-copy p,
+.book-meta,
+.book-inline-meta,
+.field span,
+.detail-facts dt,
+.mini-book-card span,
+.mini-list-empty,
+.hero-aside p:last-child {
+  margin: 0;
+  color: var(--muted);
+}
+
+.eyebrow {
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: var(--gold);
+}
+
+.feedback {
+  min-height: 1.35rem;
+  margin: 0;
+}
+
+.feedback.success {
+  color: var(--success);
+}
+
+.feedback.error {
+  color: var(--danger);
+}

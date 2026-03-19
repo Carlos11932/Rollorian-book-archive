@@ -1,0 +1,233 @@
+.page-backdrop {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.page-backdrop-glow {
+  position: absolute;
+  width: 36rem;
+  height: 36rem;
+  border-radius: 999px;
+  filter: blur(80px);
+  opacity: 0.48;
+}
+
+.glow-left {
+  top: -8rem;
+  left: -10rem;
+  background: rgba(214, 59, 47, 0.42);
+}
+
+.glow-right {
+  right: -12rem;
+  top: 6rem;
+  background: rgba(69, 99, 141, 0.34);
+}
+
+.page-backdrop-grid {
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.65), transparent 85%);
+}
+
+.app-shell {
+  position: relative;
+  z-index: 1;
+  width: min(1360px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: 1rem 0 4rem;
+}
+
+.site-header,
+.shell-banner,
+.panel,
+.hero-panel,
+.book-card,
+.summary-card,
+.route-card,
+.empty-state,
+.empty-route,
+.rail-section {
+  background: linear-gradient(180deg, rgba(19, 27, 41, 0.88), rgba(8, 12, 20, 0.88));
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(16px);
+}
+
+.site-header {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+  align-items: flex-start;
+  padding: clamp(1rem, 2vw, 1.4rem) clamp(1.2rem, 2.8vw, 2rem);
+  border-radius: var(--radius-xl);
+}
+
+.brand-block,
+.shell-copy-block,
+.hero-copy-block,
+.detail-copy,
+.book-content,
+.field,
+.view-stack,
+.stack-gap,
+.library-sections,
+.section-heading-copy,
+.home-rail-stack,
+.detail-form,
+.app-main {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.brand-block {
+  max-width: 42rem;
+}
+
+.brand-link {
+  display: inline-flex;
+  gap: var(--space-3);
+  align-items: center;
+}
+
+.brand-mark {
+  display: grid;
+  place-items: center;
+  width: 3.35rem;
+  height: 3.35rem;
+  border-radius: 1rem;
+  background: linear-gradient(160deg, var(--accent) 0%, var(--accent-strong) 100%);
+  color: #fff5ed;
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16);
+}
+
+.brand-link strong {
+  display: block;
+  font-size: 1.45rem;
+}
+
+.site-nav {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.site-nav a,
+.status-tab,
+.hero-chip,
+.status-pill,
+.detail-meta-chip,
+.shell-stat-pill {
+  border-radius: 999px;
+  border: 1px solid var(--line-strong);
+  background: rgba(255, 255, 255, 0.06);
+  padding: 0.7rem 1rem;
+  font-weight: 700;
+}
+
+.site-nav a {
+  color: var(--muted);
+  transition: color 200ms ease, background 200ms ease, border-color 200ms ease;
+}
+
+.site-nav a.is-active,
+.status-tab.is-active {
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-strong) 100%);
+  border-color: transparent;
+  color: #fff6ef;
+}
+
+.shell-banner {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(260px, 0.9fr);
+  gap: var(--space-4);
+  padding: clamp(1.4rem, 3vw, 2rem);
+  border-radius: var(--radius-xl);
+  margin: var(--space-4) 0 var(--space-5);
+  animation: rise-in 320ms ease;
+}
+
+.shell-banner h1,
+.hero-panel h1,
+.panel h1,
+.empty-route h1 {
+  line-height: 0.95;
+  font-size: clamp(2.35rem, 5vw, 5rem);
+  max-width: 12ch;
+}
+
+.shell-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-content: start;
+  justify-content: flex-end;
+}
+
+.route-home .shell-banner,
+.route-home .site-header {
+  border-color: rgba(214, 59, 47, 0.22);
+}
+
+.route-search .shell-banner,
+.route-search .site-header {
+  border-color: rgba(69, 99, 141, 0.28);
+}
+
+.route-library .shell-banner,
+.route-library .site-header {
+  border-color: rgba(242, 192, 120, 0.22);
+}
+
+@media (max-width: 1120px) {
+  .shell-banner {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 860px) {
+  .site-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .site-nav,
+  .shell-stats {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 720px) {
+  .app-shell {
+    width: min(100% - 1rem, 100%);
+    padding-top: 0.75rem;
+  }
+
+  .site-header,
+  .shell-banner,
+  .panel,
+  .hero-panel,
+  .summary-card,
+  .route-card,
+  .empty-state,
+  .empty-route,
+  .rail-section {
+    padding: var(--space-3);
+  }
+
+  .shell-banner h1,
+  .hero-panel h1,
+  .panel h1,
+  .empty-route h1 {
+    max-width: 100%;
+    font-size: clamp(2rem, 9vw, 3.2rem);
+  }
+}

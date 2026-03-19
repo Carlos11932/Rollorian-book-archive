@@ -17,7 +17,7 @@ function createCoverMarkup(book, tone = 'warm') {
 
 function createCardOverlay(book) {
   return `
-    <div class="card-overlay" aria-hidden="true">
+    <div class="card-overlay">
       <p class="overlay-title">${escapeHtml(book.title)}</p>
       <p class="overlay-author">${escapeHtml(formatAuthors(book.authors))}</p>
       <a class="button button-primary overlay-detail-btn" href="#/books/${book.id}">Ver detalles</a>

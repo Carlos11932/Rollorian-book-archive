@@ -1,0 +1,66 @@
+.filters-panel {
+  align-items: end;
+}
+
+.search-field-wide {
+  flex: 1 1 340px;
+}
+
+.status-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.status-tab {
+  cursor: pointer;
+  color: var(--muted);
+  transition: color 200ms ease, background 200ms ease, border-color 200ms ease;
+}
+
+.field {
+  gap: 0.5rem;
+}
+
+.field input,
+.field select,
+.book-notes {
+  width: 100%;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--line-strong);
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text);
+  padding: 0.95rem 1rem;
+}
+
+.field input::placeholder,
+.book-notes::placeholder {
+  color: rgba(247, 240, 232, 0.52);
+}
+
+.field input:focus,
+.field select:focus,
+.book-notes:focus,
+.button:focus-visible,
+.site-nav a:focus-visible,
+.status-tab:focus-visible,
+.inline-link:focus-visible,
+.rail-track:focus-visible {
+  outline: 2px solid rgba(242, 192, 120, 0.92);
+  outline-offset: 2px;
+}
+
+.book-notes {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.library-card-controls {
+  display: grid;
+  grid-template-columns: minmax(0, 180px) 1fr;
+  gap: var(--space-3);
+}
+
+.notes-field {
+  min-width: 0;
+}

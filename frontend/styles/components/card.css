@@ -1,0 +1,210 @@
+/* ── Book cards – Netflix hover effect ── */
+
+.book-card {
+  display: grid;
+  grid-template-columns: 118px 1fr;
+  gap: var(--space-3);
+  border-radius: var(--radius-lg);
+  padding: var(--space-3);
+  position: relative;
+  transition: transform 250ms ease, border-color 250ms ease, box-shadow 250ms ease, z-index 0ms;
+  animation: fade-slide-up 350ms ease both;
+  animation-delay: calc(var(--i, 0) * 60ms);
+}
+
+.book-card:hover,
+.poster-card:hover {
+  transform: scale(1.05);
+  z-index: 10;
+  box-shadow: var(--shadow-lg);
+  border-color: rgba(255, 255, 255, 0.28);
+}
+
+.route-card:hover {
+  border-color: rgba(255, 255, 255, 0.28);
+}
+
+/* Card hover overlay */
+.card-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: var(--space-3);
+  background: linear-gradient(to top, rgba(8, 11, 18, 0.92) 0%, rgba(8, 11, 18, 0.4) 50%, transparent 100%);
+  border-radius: var(--radius-lg);
+  opacity: 0;
+  transition: opacity 250ms ease;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.book-card:hover .card-overlay,
+.poster-card:hover .card-overlay {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.card-overlay .overlay-title {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 0.25rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-overlay .overlay-author {
+  font-size: 0.82rem;
+  color: var(--muted);
+  margin: 0 0 0.6rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-overlay .button {
+  padding: 0.5rem 0.9rem;
+  font-size: 0.82rem;
+  align-self: flex-start;
+}
+
+.book-cover-wrap,
+.detail-cover-wrap {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: linear-gradient(180deg, #33425a 0%, #1c2533 100%);
+}
+
+.book-cover-wrap.warm {
+  background: linear-gradient(180deg, #6a2a2c 0%, #23151b 100%);
+}
+
+.book-cover-wrap.cool {
+  background: linear-gradient(180deg, #30465d 0%, #1a2736 100%);
+}
+
+.book-cover-wrap {
+  width: 118px;
+  min-height: 176px;
+}
+
+.book-cover,
+.detail-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: none;
+}
+
+.book-cover.has-image,
+.detail-cover-wrap.has-image .detail-cover {
+  display: block;
+}
+
+.cover-fallback {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  text-align: center;
+  color: rgba(247, 240, 232, 0.66);
+  font-family: var(--font-display);
+}
+
+.book-heading-block,
+.mini-book-card div {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.book-card-topline {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.book-title {
+  font-size: 1.3rem;
+}
+
+.book-inline-meta,
+.book-actions,
+.detail-facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem 1rem;
+}
+
+.summary-card,
+.route-card,
+.empty-state {
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+}
+
+.summary-card strong {
+  display: block;
+  font-size: 2.2rem;
+}
+
+.route-card {
+  display: grid;
+  gap: 0.6rem;
+  text-align: left;
+  cursor: pointer;
+  transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+}
+
+.empty-state,
+.empty-route,
+.onboarding-panel {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.empty-state {
+  min-height: 100%;
+}
+
+.empty-route {
+  justify-items: start;
+}
+
+.mini-list-empty {
+  padding: 1rem;
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--radius-md);
+}
+
+.search-grid .book-card {
+  grid-template-columns: 1fr;
+}
+
+.search-grid .book-cover-wrap {
+  width: 100%;
+  min-height: 200px;
+}
+
+@media (max-width: 1120px) {
+  .library-card-controls {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .book-card {
+    grid-template-columns: 1fr;
+  }
+
+  .book-cover-wrap {
+    width: 100%;
+    max-width: 220px;
+  }
+}

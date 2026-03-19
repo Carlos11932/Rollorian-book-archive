@@ -1,0 +1,92 @@
+/* ── Hero panel – Netflix full-width banner ── */
+
+.hero-panel {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+  border-radius: var(--radius-xl);
+  padding: 0;
+  overflow: hidden;
+  position: relative;
+  min-height: 420px;
+}
+
+.hero-panel::before {
+  content: "";
+  position: absolute;
+  inset: auto auto -30% -5%;
+  width: 24rem;
+  height: 24rem;
+  background: radial-gradient(circle, rgba(214, 59, 47, 0.22), transparent 68%);
+  pointer-events: none;
+}
+
+/* Hero backdrop image */
+.hero-backdrop {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  z-index: 0;
+  opacity: 0.45;
+  transition: opacity 500ms ease;
+}
+
+.hero-backdrop::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to right, var(--bg) 30%, transparent 70%),
+    linear-gradient(to top, var(--bg) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+/* Hero content sits above backdrop */
+.hero-copy-block {
+  position: relative;
+  z-index: 2;
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  max-width: 42rem;
+}
+
+.hero-aside {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  align-content: start;
+  gap: 0.6rem;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.1), rgba(214, 59, 47, 0.1));
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  margin: 0 clamp(1.5rem, 4vw, 2.5rem) clamp(1.5rem, 4vw, 2.5rem) 0;
+  justify-self: end;
+  align-self: end;
+  min-width: 260px;
+  backdrop-filter: blur(12px);
+}
+
+.hero-aside strong {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 3vw, 2.7rem);
+}
+
+@media (max-width: 1120px) {
+  .hero-aside {
+    margin: 0 var(--space-4) var(--space-4);
+    justify-self: stretch;
+  }
+}
+
+@media (max-width: 720px) {
+  .hero-panel {
+    padding: 0;
+    min-height: 320px;
+  }
+
+  .hero-copy-block {
+    padding: var(--space-3);
+  }
+}
